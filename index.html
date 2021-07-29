@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+  <h2>Time Drop down</h2>
+  <p>The form below contains two dropdown menus (select lists):</p>
+
+  <div class="row">
+    <div class="col-3">
+       <div class="form-group">
+          <label for="sel1">Select list (select one):</label>
+          <select class="form-control" id="time-select">
+          </select>         
+        </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
+
+<script type="text/javascript">
+  var start_time_in = '01:00';
+  var end_time_in = '13:00';
+
+ 
+  function setTimeSelect(selector,start,end) {
+    var alltimes = setallTimes_(start_time_in,end_time_in,15)
+    if(alltimes.length){
+      var html = '';
+
+       alltimes.forEach(t=> {
+        html += `<option value="${t}">${t}</option>`;
+       })
+
+       $(selector).html(html);
+    }
+  }
+  setTimeSelect('#time-select',start_time_in,end_time_in)
+
+  function hourstominutes(hhmm) {
+
+      var time = hhmm.split(':')
+      var h = parseInt(time[0])*60;
+      var t =  parseInt(time[1])+h;
+      return t;
+  }
+  function setallTimes_(from_time, to_time,gap=30) {
+   
+        var start_time = hourstominutes(from_time);
+        var end_time = hourstominutes(to_time);
+
+
+        var start = moment();
+        var remainder = 30 - (start.minute() % 30);
+
+        //var now = hourstominutes(moment(start).add(remainder, "minutes").format("HH:mm"));
+        // var now = this.hourstominutes(moment().format("HH:mm"));
+        //var start_time_init = start_time;
+       /* if(now>start_time) {
+            start_time = now
+        }*/
+       /* var addtime = this.restaurant.info.delivery_process_time;
+        if( this.picupordelivery == 'online_pickup_price') {
+            addtime =  this.restaurant.info.pickup_process_time;
+        }
+        addtime = addtime?parseInt(addtime):0;
+        start_time = start_time +addtime;*/
+       
+        /*if(start_time >= end_time){
+          return [];
+        }*/
+
+        if(end_time == '1440'){
+            end_time -=30;
+        }
+        var tt = start_time; // start time
+        var x = gap; //minutes interval
+        var times = []; // time array
+        // var tt = 0; // start time
+        var ap = ['AM', 'PM']; // AM-PM
+        for (var i=0;tt<=end_time; i++) {
+
+              var hh = Math.floor(tt/60); // getting hours of day in 0-24 format
+              var mm = (tt%60); // getting minutes of the hour in 0-55 format
+              if(hh == 12){
+              times[i] = ("0" + (hh)).slice(-2) + ':' + ("0" + mm).slice(-2) +' '+ ap[Math.floor(hh/12)]; 
+              }else{
+                   times[i] = ("0" + (hh %12)).slice(-2) + ':' + ("0" + mm).slice(-2) +' '+ ap[Math.floor(hh/12)];
+              }
+              tt = tt + x;
+        }
+        return times;
+    }
+</script>
